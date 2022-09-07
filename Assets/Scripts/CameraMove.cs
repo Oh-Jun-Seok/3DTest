@@ -36,6 +36,7 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawRay(transform.position, new Vector3(transform.forward.x, 0f, transform.forward.z).normalized, Color.red);
         rotX += -(Input.GetAxis("Mouse Y")) * sensitivity * Time.deltaTime;
         rotY += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
 
@@ -55,8 +56,6 @@ public class CameraMove : MonoBehaviour
             finalDistance = Mathf.Clamp(hit.distance, minDistance, maxDistance);
         else
             finalDistance = maxDistance;
-
-        Debug.Log(finalDistance);
 
         realCamera.localPosition = Vector3.Lerp(realCamera.localPosition, dirNomalized * finalDistance, Time.deltaTime * smoothness);
     }
