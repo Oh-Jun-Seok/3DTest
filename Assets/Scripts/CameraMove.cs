@@ -28,9 +28,6 @@ public class CameraMove : MonoBehaviour
 
         dirNomalized = realCamera.localPosition.normalized;
         finalDistance = realCamera.localPosition.magnitude;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -46,17 +43,20 @@ public class CameraMove : MonoBehaviour
     }
     private void LateUpdate()
     {
-        transform.position = Vector3.MoveTowards(transform.position, follow.position, followSpeed * Time.deltaTime);
+        if (follow != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, follow.position, followSpeed * Time.deltaTime);
 
-        finalDir = transform.TransformPoint(dirNomalized * maxDistance);
+            finalDir = transform.TransformPoint(dirNomalized * maxDistance);
 
-        RaycastHit hit;
+            RaycastHit hit;
 
-        if (Physics.Linecast(transform.position, finalDir, out hit))
-            finalDistance = Mathf.Clamp(hit.distance, minDistance, maxDistance);
-        else
-            finalDistance = maxDistance;
+            if (Physics.Linecast(transform.position, finalDir, out hit))
+                finalDistance = Mathf.Clamp(hit.distance, minDistance, maxDistance);
+            else
+                finalDistance = maxDistance;
 
-        realCamera.localPosition = Vector3.Lerp(realCamera.localPosition, dirNomalized * finalDistance, Time.deltaTime * smoothness);
+            realCamera.localPosition = Vector3.Lerp(realCamera.localPosition, dirNomalized * finalDistance, Time.deltaTime * smoothness);
+        }
     }
 }
